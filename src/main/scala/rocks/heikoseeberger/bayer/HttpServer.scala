@@ -19,7 +19,6 @@ package rocks.heikoseeberger.bayer
 import akka.actor.CoordinatedShutdown
 import akka.actor.typed.ActorSystem
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.{ Directives, Route }
 import rocks.heikoseeberger.slf4s.Logging
 import scala.concurrent.{ Future, Promise }
@@ -63,7 +62,7 @@ object HttpServer extends Logging:
     pathSingleSlash {
       get {
         complete {
-          StatusCodes.OK
+          "Habe die Ehre!"
         }
       }
     }

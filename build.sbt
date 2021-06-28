@@ -31,7 +31,7 @@ inThisBuild(
 lazy val bayer =
   project
     .in(file("."))
-    .enablePlugins(AutomateHeaderPlugin)
+    .enablePlugins(AutomateHeaderPlugin, DockerPlugin, JavaAppPackaging)
     .settings(commonSettings)
     .settings(
       libraryDependencies ++= Seq(
@@ -48,6 +48,14 @@ lazy val bayer =
         library.munit           % Test,
         library.munitScalaCheck % Test,
       ),
+      // Docker settings
+      dockerBaseImage := "adoptopenjdk:11-jre-hotspot",
+      dockerRepository := Some("hseeberger"),
+      dockerExposedPorts := Seq(8080, 8558, 25520),
+      Docker / maintainer := organizationName.value,
+      // Publish settings
+      Compile / packageDoc / publishArtifact := false, // speed up building Docker images
+      Compile / packageSrc / publishArtifact := false, // speed up building Docker images
     )
 
 // *****************************************************************************
