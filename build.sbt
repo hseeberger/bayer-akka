@@ -86,7 +86,6 @@ lazy val library =
       val log4j     = "2.14.1"
       val slf4s     = "0.2.0"
     }
-    val akkaDiscovery     = "com.typesafe.akka" %% "akka-discovery"       % Version.akka
     val akkaHttp          = "com.typesafe.akka" %% "akka-http"            % Version.akkaHttp
     val akkaHttp2Support  = "com.typesafe.akka" %% "akka-http2-support"   % Version.akkaHttp
     val akkaHttpSprayJson = "com.typesafe.akka" %% "akka-http-spray-json" % Version.akkaHttp
