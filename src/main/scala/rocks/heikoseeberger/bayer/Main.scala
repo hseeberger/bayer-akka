@@ -32,11 +32,11 @@ import scala.jdk.DurationConverters.given
   */
 @main def bayer(): Unit =
   val asyncLoggerName = classOf[AsyncLoggerContextSelector].getName
-  if !sys.props.get("log4j2.contextSelector").exists(_ == asyncLoggerName) then
+  if !sys.props.get("log4j2.contextSelector").contains(asyncLoggerName) then
     println(s"WARNING: system property log4j2.contextSelector not set to [$asyncLoggerName]!")
 
   val config        = Main.Config.load()
-  val classicSystem = ClassicSystem("bayer")
+  val classicSystem = ClassicSystem(Main.Name)
   val mgmt          = AkkaManagement(classicSystem)
   val shutdown      = CoordinatedShutdown(classicSystem)
 
@@ -55,7 +55,7 @@ object Main:
 
   object Config:
     def load(): Config =
-      val bayer      = ConfigFactory.load().getConfig("bayer")
+      val bayer      = ConfigFactory.load().getConfig(Name)
       val httpServer = bayer.getConfig("http-server")
       Config(
         HttpServer.Config(
@@ -66,6 +66,8 @@ object Main:
       )
 
   final case class Config(httpServer: HttpServer.Config)
+
+  inline val Name = "bayer"
 
   def apply(config: Config): Behavior[Command] =
     Behaviors.setup { context =>
