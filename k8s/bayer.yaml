@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: bayer
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: bayer
+  name: bayer-http
+spec:
+  selector:
+    app: bayer
+  type: NodePort
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: bayer
+  name: bayer-mgmt
+spec:
+  selector:
+    app: bayer
+  type: NodePort
+  ports:
+  - name: mgmt
+    port: 8558
+    targetPort: mgmt
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: bayer
+  name: bayer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bayer
+  template:
+    metadata:
+      namespace: bayer
+      name: bayer
+      labels:
+        app: bayer
+    spec:
+      containers:
+      - name: bayer
+        image: hseeberger/bayer:latest
+        imagePullPolicy: IfNotPresent
+        args: [ "-Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector" ]
+        ports:
+        - name: http
+          containerPort: 8080
+        - name: mgmt
+          containerPort: 8558
+        - name: akka-remote
+          containerPort: 25520
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: bayer
+  name: pod-reader
+rules:
+- apiGroups: [ "" ]
+  resources: [ "pods" ]
+  verbs: [ "get", "watch", "list" ]
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  namespace: bayer
+  name: read-pods
+subjects:
+- kind: User
+  name: system:serviceaccount:bayer:default
+roleRef:
+  kind: Role
+  name: pod-reader
+  apiGroup: rbac.authorization.k8s.io
