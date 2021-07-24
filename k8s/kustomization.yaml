@@ -4,4 +4,4 @@ resources:
 - bayer.yaml
 images:
 - name: hseeberger/bayer
-  newTag: ???
+  newTag: $VERSION

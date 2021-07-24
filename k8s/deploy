@@ -13,7 +13,7 @@ while getopts ":hv:" opt; do
     exit 0
     ;;
   v)
-    version=$OPTARG
+    VERSION=$OPTARG
     ;;
   \?)
     echo "Invalid option: -$opt" >&2
@@ -29,19 +29,20 @@ while getopts ":hv:" opt; do
 done
 shift $(($OPTIND - 1))
 
-if [ -z "$version" ]; then
-  version=$(docker images --format "{{.Tag}}" hseeberger/bayer | sort -r | head -1)
-elif [ -z $(docker images --format "{{.Tag}}" hseeberger/bayer | grep -x $version) ]; then
-  echo "Unknown version: $version" >&2
+if [ -z "$VERSION" ]; then
+  VERSION=$(docker images --format "{{.Tag}}" hseeberger/bayer | sort -r | head -1)
+  if [ -z "$VERSION" ]; then
+    echo "ERROR: Cannot find any Docker image for hseeberger/bayer" >&2
+    exit 1
+  fi
+elif [ -z $(docker images --format "{{.Tag}}" hseeberger/bayer | grep -x $VERSION) ]; then
+  echo "ERROR: Unknown version $VERSION" >&2
   exit 1
 fi
+export VERSION
+echo "Deploying version $VERSION"
 
 current_dir=$(pwd)
 cd $(dirname $0)
-
-cp kustomization.yaml /tmp/
-kustomize edit set image hseeberger/bayer:$version
-kubectl apply -k .
-
-cp /tmp/kustomization.yaml .
+kustomize build | envsubst | kubectl apply -f -
 cd $current_dir
