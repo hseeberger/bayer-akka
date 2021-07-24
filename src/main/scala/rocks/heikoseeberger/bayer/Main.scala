@@ -16,7 +16,7 @@
 
 package rocks.heikoseeberger.bayer
 
-import akka.actor.{ CoordinatedShutdown, ActorSystem => ClassicSystem }
+import akka.actor.{ CoordinatedShutdown, ActorSystem as ClassicSystem }
 import akka.actor.CoordinatedShutdown.PhaseBeforeServiceUnbind
 import akka.actor.typed.{ ActorRef, ActorSystem, Behavior }
 import akka.actor.typed.scaladsl.Behaviors
@@ -71,7 +71,7 @@ object Main:
 
   def apply(config: Config): Behavior[Command] =
     Behaviors.setup { context =>
-      given ActorSystem[_] = context.system
+      given ActorSystem[?] = context.system
       HttpServer.run(config.httpServer)
       Behaviors.empty
     }

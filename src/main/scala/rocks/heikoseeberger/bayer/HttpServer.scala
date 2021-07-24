@@ -41,8 +41,8 @@ object HttpServer extends Logging:
 
   private val ready = Promise[Boolean]()
 
-  def run(config: Config)(implicit system: ActorSystem[_]): Unit =
-    import config._
+  def run(config: Config)(using system: ActorSystem[?]): Unit =
+    import config.*
     import system.executionContext
     Http()
       .newServerAt(interface, port)
@@ -58,7 +58,7 @@ object HttpServer extends Logging:
       }
 
   def route: Route =
-    import Directives._
+    import Directives.*
     pathSingleSlash {
       get {
         complete {

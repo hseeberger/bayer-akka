@@ -8,14 +8,16 @@ inThisBuild(
     organizationName := "Heiko Seeberger",
     startYear := Some(2021),
     licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0")),
-    scalaVersion := "3.0.1-RC2",
+    scalaVersion := "3.0.1",
     scalacOptions ++= Seq(
       "-deprecation",
       "-unchecked",
-      "-new-syntax",
       "-rewrite",
+      "-indent",
       "-pagewidth",
       "100",
+      "-source",
+      "future",
       "-Xfatal-warnings",
     ),
     testFrameworks += new TestFramework("munit.Framework"),
@@ -80,8 +82,8 @@ lazy val library =
     object Version {
       val akka      = "2.6.15"
       val akkaHttp  = "10.2.4"
-      val akkaMgmt  = "1.1.0"
-      val munit     = "0.7.26"
+      val akkaMgmt  = "1.1.1"
+      val munit     = "0.7.27"
       val disruptor = "3.4.4"
       val log4j     = "2.14.1"
       val slf4s     = "0.2.0"
