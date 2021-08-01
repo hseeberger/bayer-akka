@@ -33,13 +33,13 @@ object HttpServer extends Logging:
 
   final case class Config(interface: String, port: Int, terminationDeadline: FiniteDuration)
 
-  final class ReadinessCheck extends (() => Future[Boolean]):
-    override def apply(): Future[Boolean] =
-      ready.future
+  // final class ReadinessCheck extends (() => Future[Boolean]):
+  //   override def apply(): Future[Boolean] =
+  //     ready.future
 
   private object BindFailure extends CoordinatedShutdown.Reason
 
-  private val ready = Promise[Boolean]()
+  // private val ready = Promise[Boolean]()
 
   def run(config: Config)(using system: ActorSystem[?]): Unit =
     import config.*
@@ -53,7 +53,7 @@ object HttpServer extends Logging:
           CoordinatedShutdown(system).run(BindFailure)
         case Success(binding) =>
           logger.info(s"Listening to HTTP connections on ${binding.localAddress}")
-          ready.success(true)
+          // ready.success(true)
           binding.addToCoordinatedShutdown(terminationDeadline)
       }
 

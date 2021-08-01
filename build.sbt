@@ -30,7 +30,7 @@ inThisBuild(
 // Projects
 // *****************************************************************************
 
-lazy val bayer =
+lazy val `bayer-akka` =
   project
     .in(file("."))
     .enablePlugins(AutomateHeaderPlugin, DockerPlugin, JavaAppPackaging)

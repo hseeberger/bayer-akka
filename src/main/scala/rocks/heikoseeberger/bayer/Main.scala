@@ -37,13 +37,13 @@ import scala.jdk.DurationConverters.given
 
   val config        = Main.Config.load()
   val classicSystem = ClassicSystem(Main.Name)
-  val mgmt          = AkkaManagement(classicSystem)
-  val shutdown      = CoordinatedShutdown(classicSystem)
+  // val mgmt          = AkkaManagement(classicSystem)
+  val shutdown = CoordinatedShutdown(classicSystem)
 
   given ExecutionContext = classicSystem.dispatcher
-  mgmt
-    .start()
-    .foreach(_ => shutdown.addTask(PhaseBeforeServiceUnbind, "stop-akka-mgmt")(() => mgmt.stop()))
+  // mgmt
+  //   .start()
+  //   .foreach(_ => shutdown.addTask(PhaseBeforeServiceUnbind, "stop-akka-mgmt")(() => mgmt.stop()))
   classicSystem.spawn(Main(config), "main")
 
 /**
