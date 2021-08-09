@@ -73,7 +73,7 @@ lazy val library =
   new {
     object Version {
       val akka     = "2.6.15"
-      val akkaHttp = "10.2.5"
+      val akkaHttp = "10.2.6"
     }
     val akkaHttp          = "com.typesafe.akka" %% "akka-http"            % Version.akkaHttp
     val akkaHttp2Support  = "com.typesafe.akka" %% "akka-http2-support"   % Version.akkaHttp
