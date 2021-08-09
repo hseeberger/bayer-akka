@@ -40,20 +40,12 @@ lazy val `bayer-akka` =
         library.akkaHttp.cross(CrossVersion.for3Use2_13),
         library.akkaHttp2Support.cross(CrossVersion.for3Use2_13),
         library.akkaHttpSprayJson.cross(CrossVersion.for3Use2_13),
-        library.akkaMgmt.cross(CrossVersion.for3Use2_13),
-        library.akkaSlf4j.cross(CrossVersion.for3Use2_13),
         library.akkaStreamTyped.cross(CrossVersion.for3Use2_13),
-        library.disruptor,
-        library.log4jCore,
-        library.log4jSlf4j,
-        library.slf4s,
-        library.munit           % Test,
-        library.munitScalaCheck % Test,
       ),
       // Docker settings
       dockerBaseImage := "adoptopenjdk:11-jre-hotspot",
       dockerRepository := Some("hseeberger"),
-      dockerExposedPorts := Seq(8080, 8558, 25520),
+      dockerExposedPorts := Seq(8080),
       Docker / maintainer := organizationName.value,
       // Publish settings
       Compile / packageDoc / publishArtifact := false, // speed up building Docker images
@@ -80,24 +72,11 @@ lazy val commonSettings =
 lazy val library =
   new {
     object Version {
-      val akka      = "2.6.15"
-      val akkaHttp  = "10.2.5"
-      val akkaMgmt  = "1.1.1"
-      val munit     = "0.7.27"
-      val disruptor = "3.4.4"
-      val log4j     = "2.14.1"
-      val slf4s     = "0.2.0"
+      val akka     = "2.6.15"
+      val akkaHttp = "10.2.5"
     }
     val akkaHttp          = "com.typesafe.akka" %% "akka-http"            % Version.akkaHttp
     val akkaHttp2Support  = "com.typesafe.akka" %% "akka-http2-support"   % Version.akkaHttp
     val akkaHttpSprayJson = "com.typesafe.akka" %% "akka-http-spray-json" % Version.akkaHttp
-    val akkaMgmt        = "com.lightbend.akka.management" %% "akka-management"   % Version.akkaMgmt
-    val akkaSlf4j       = "com.typesafe.akka"             %% "akka-slf4j"        % Version.akka
-    val akkaStreamTyped = "com.typesafe.akka"             %% "akka-stream-typed" % Version.akka
-    val disruptor       = "com.lmax"                       % "disruptor"         % Version.disruptor
-    val log4jCore       = "org.apache.logging.log4j"       % "log4j-core"        % Version.log4j
-    val log4jSlf4j      = "org.apache.logging.log4j"       % "log4j-slf4j-impl"  % Version.log4j
-    val munit           = "org.scalameta"                 %% "munit"             % Version.munit
-    val munitScalaCheck = "org.scalameta"                 %% "munit-scalacheck"  % Version.munit
-    val slf4s           = "rocks.heikoseeberger"          %% "slf4s"             % Version.slf4s
+    val akkaStreamTyped   = "com.typesafe.akka" %% "akka-stream-typed"    % Version.akka
   }
